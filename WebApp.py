@@ -14,6 +14,7 @@ from yellowbrick.features import ParallelCoordinates
 import plotly.graph_objects as go
 from keras.datasets import mnist
 from sklearn import datasets
+import tensorflow as tf
 ##################################################################################################################################################################
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import minmax_scale
