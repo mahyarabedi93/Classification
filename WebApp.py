@@ -102,8 +102,8 @@ with tab[0]:
     cols=st.columns(6,gap='medium')
     Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
     if Dataset_Name == 'MNIST':
-        A = pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
-        A = pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
+        #A = pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
+        A = pd.read_csv('MNIST_1.csv')
         X=A.iloc[:,1:].to_numpy()
         y=A.iloc[:,0].to_numpy()
         labels=np.unique(y)
