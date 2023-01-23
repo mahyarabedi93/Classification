@@ -38,7 +38,7 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.gaussian_process.kernels import RBF, RationalQuadratic, Matern, ExpSineSquared,DotProduct
 ##################################################################################################################################################################
 from sklearn.model_selection import cross_val_score
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, plot_precision_recall_curve
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import PrecisionRecallDisplay
 from sklearn import metrics
@@ -330,7 +330,7 @@ with tab[0]:
     y_Classification = np.copy(y_New)
     
     # tabs = st.tabs(["Cross Validation Score", "Confusion Matrix Visualizaiton", "Precision-Recall Curve" , "Receiver Operating Characteristic"])
-    cols2 = st.columns(3,gap='medium')
+    cols2 = st.columns(2,gap='medium')
     
     with cols2[1]:
         Test_Size = st.number_input('Test Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.2,format='%f')
@@ -365,18 +365,20 @@ with tab[0]:
         fig.update_coloraxes(showscale=False)
         st.plotly_chart(fig, use_container_width=True)
         
-    with cols2[2]:
-        Train_Size = st.number_input('Train Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.8,format='%f')
-        Random_State = st.slider('Random state for Split:', 0, 200, 40)
-        X_train, X_test, y_train, y_test = train_test_split(X_Classification, y_Classification,random_state=12,train_size=Train_Size)
-        Estimator.fit(X_train, y_train)
-        predictions = Estimator.predict(X_test)
-        Labels_Name = np.unique(y_Classification)
-        plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=First_Label)
-        st.pyplot()
-        if Classification_Option== 'One vs. One':
-            plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=Second_Label)
-            st.pyplot()
+    # with cols2[2]:
+        # Train_Size = st.number_input('Train Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.8,format='%f')
+        # Random_State = st.slider('Random state for Split:', 0, 200, 40)
+        # X_train, X_test, y_train, y_test = train_test_split(X_Classification, y_Classification,random_state=12,train_size=Train_Size)
+        # Estimator.fit(X_train, y_train)
+        # predictions = Estimator.predict(X_Classification)
+        # Labels_Name = np.unique(y_Classification)
+        # precision, recall, thresholds = precision_recall_curve(y_Classification, predictions)
+        
+        # plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=First_Label)
+        # st.pyplot()
+        # if Classification_Option== 'One vs. One':
+            # plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=Second_Label)
+            # st.pyplot()
             
     # with cols2[3]:
     # cross_val_score(Estimator, X_Classification, y_Classification, cv=5)
