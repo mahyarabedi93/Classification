@@ -102,12 +102,12 @@ with tab[0]:
     cols=st.columns(6,gap='medium')
     Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
     if Dataset_Name == 'MNIST':
-        A=pd.read_csv("MNIST.csv")
+        A=df = pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
         X=A.iloc[:,1:].to_numpy()
         y=A.iloc[:,0].to_numpy()
         labels=np.unique(y)
         
-        num_to_plot = 80 # plotting the first 16 images in the dataset
+        num_to_plot = 10 # plotting the first 16 images in the dataset
         #fig=plt.figure(figsize=(60,60))
         Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
 
