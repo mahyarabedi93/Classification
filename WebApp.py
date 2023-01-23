@@ -12,9 +12,7 @@ from plotly.subplots import make_subplots
 from mpl_toolkits.mplot3d import Axes3D
 from yellowbrick.features import ParallelCoordinates
 import plotly.graph_objects as go
-from keras.datasets import mnist
 from sklearn import datasets
-import tensorflow as tf
 ##################################################################################################################################################################
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import minmax_scale
@@ -104,9 +102,9 @@ with tab[0]:
     cols=st.columns(6,gap='medium')
     Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
     if Dataset_Name == 'MNIST':
-        (train_X, train_y), (test_X, test_y) = mnist.load_data()
-        X=np.append(train_X,test_X,axis=0).reshape(70000,784)
-        y=np.append(train_y,test_y,axis=0)
+        A=pd.read_csv("MNIST.csv")
+        X=A.iloc[:,1:].to_numpy()
+        y=A.iloc[:,0].to_numpy()
         labels=np.unique(y)
         
         num_to_plot = 80 # plotting the first 16 images in the dataset
@@ -114,7 +112,7 @@ with tab[0]:
         Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
 
         if Visualizaiton==True:
-            fig = px.imshow(train_X[:num_to_plot, :, :], animation_frame=0,height=400)
+            fig = px.imshow(X[:num_to_plot, :].reshape(num_to_plot,28,28), animation_frame=0,height=400)
             st.plotly_chart(fig, use_container_width=True)
         
         
