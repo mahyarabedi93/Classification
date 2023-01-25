@@ -96,19 +96,19 @@ with cols[2].expander("Calming Video"):
 ####################################################################################################################################################################
 
 st.write(font_css, unsafe_allow_html=True)
-tab = st.tabs(["Binary Classifier", "Case Study: Binary Classification of Unbiased Dataset", "Multi Labels Classifier"])
+tab = st.tabs(["Binary Classifier", "Case Study: Binary Classification of Biased Dataset", "Multi Labels Classifier"])
 
 with tab[0]:
     cols=st.columns(6,gap='medium')
     Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
     if Dataset_Name == 'MNIST':
-        #A = pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
+        # A= pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
         A = pd.read_csv('MNIST_1.csv')
         X=A.iloc[:,1:].to_numpy()
         y=A.iloc[:,0].to_numpy()
         labels=np.unique(y)
         
-        num_to_plot = 10 # plotting the first 16 images in the dataset
+        num_to_plot = 20 # plotting the first 16 images in the dataset
         #fig=plt.figure(figsize=(60,60))
         Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
 
@@ -166,7 +166,7 @@ with tab[0]:
             First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
     
     Classifier_List = ['Nearest Neighbors', 'Support Vector Machine',
-                   'Decision Tree','Random Forest','Nueral Network','Ada Boost',
+                   'Decision Tree','Random Forest','Neural Network','Ada Boost',
                    'Naive Bayes', 'Quadratic Discriminant Analysis']#, 'Gaussian Process']
     Classification_Object=cols[2].selectbox( 'Classifier Object?', Classifier_List,index=0)
     
@@ -232,7 +232,7 @@ with tab[0]:
         Splitter_DTC = cols1_DTC[1].selectbox('Split strategy at each node DTC:',['best', 'random'],index = 0)
         Max_Feature_DTC = cols1_DTC[2].selectbox('Method for number of features used in split DTC:',['auto', 'sqrt', 'log2'],index = 0)
         Random_State_DTC = cols1_DTC[3].slider('Seed number for random shuffeling DTC:', 1,200, value=45,format='%i')
-        Max_Depth_DTC = cols1_DTC[4].slider('Maximum Depth of Tree DTC:', 1,100, value=45,format='%i')
+        Max_Depth_DTC = cols1_DTC[4].slider('Maximum Depth of Tree DTC:', 1,100, value=10,format='%i')
         Min_Samples_Split_DTC = cols1_DTC[5].slider('Minimum number of samples for split at internal node DTC:', 1,10, value=2,format='%i')
         Min_Samples_Leaf_DTC = cols1_DTC[6].slider('Minimum number of samples for each leaf node DTC:', 1,10, value=1,format='%i')
         
@@ -241,18 +241,18 @@ with tab[0]:
     elif Classification_Object == 'Random Forest':
         cols1_RFC = st.columns(8,gap='medium')
         
-        N_Estimators_RFC = cols1_RFC[0].slider('Number of tress in forest RFC:', 1,400, value=100,format='%i')
+        N_Estimators_RFC = cols1_RFC[0].slider('Number of trees in forest RFC:', 1,400, value=100,format='%i')
         Criterion_RFC = cols1_RFC[1].selectbox('Function to measure the quality of split RFC:',['gini', 'entropy', 'log_loss'],index = 0)
         Max_Feature_RFC = cols1_RFC[2].selectbox('Method for number of features used in split RFC:',['auto', 'sqrt', 'log2'],index = 0)
         Random_State_RFC = cols1_RFC[3].slider('Seed number for random shuffeling RFC:', 1,200, value=45,format='%i')
         Bootstraping_RFC = cols1_RFC[4].checkbox('Training data bootstrapping RFC?')
-        Max_Depth_RFC = cols1_RFC[5].slider('Maximum Depth of Tree RFC:', 1,100, value=45,format='%i')
+        Max_Depth_RFC = cols1_RFC[5].slider('Maximum Depth of Tree RFC:', 1,100, value=10,format='%i')
         Min_Samples_Split_RFC = cols1_RFC[6].slider('Minimum number of samples for split at internal node RFC:', 1,10, value=2,format='%i')
         Min_Samples_Leaf_RFC = cols1_RFC[7].slider('Minimum number of samples for each leaf node RFC:', 1,10, value=1,format='%i')
         
         Estimator = RandomForestClassifier(n_estimators=N_Estimators_RFC, criterion=Criterion_RFC, max_features=Max_Feature_RFC, max_leaf_nodes=None, min_impurity_decrease=0.0, bootstrap=Bootstraping_RFC, random_state=Random_State_RFC)
                                    
-    elif Classification_Object == 'Nueral Network':
+    elif Classification_Object == 'Neural Network':
         cols1 = st.columns(9,gap='medium')
         
         Num_Hidden_Layer = cols1[0].slider('Number of Hidden Layers for NN Classifier: ',1,20, value=2,format='%i')
@@ -363,7 +363,12 @@ with tab[0]:
         fig = px.bar(x=CV_X, y=CV_Score,labels={'x': "", 'y': "Score" })#, color=CV_X,color_discrete_sequence=px.colors.qualitative.G10)
         fig.update_coloraxes(showscale=False)
         st.plotly_chart(fig, use_container_width=True)
-        
+    
+    st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 1: What is your interpertation of Iris or Penguin dataset using visualization?</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 2: What does confusion matrix tell you?</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 3: What is the importance of cross-validation for the investigated datasets? What does it represents?</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST dataset)? </p>', unsafe_allow_html=True)
     # with cols2[2]:
         # Train_Size = st.number_input('Train Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.8,format='%f')
         # Random_State = st.slider('Random state for Split:', 0, 200, 40)
@@ -386,8 +391,197 @@ with tab[0]:
     # display = PrecisionRecallDisplay.from_estimator(Estimator, X_test, y_test, name=Classification_Object)
     # fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=2)
     
+##################################################################################################################################################################
+
 with tab[1]:
-    st.markdown('<p class="font_header">Under Construction!!!!!! </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Next, for MNIST dataset, we want to explore how unbalance dataset affect the performance of classification method for one label versus the rest. </p>', unsafe_allow_html=True)
+    cols = st.columns([4,2,2,2,2,2,2])
+        
+    A = pd.read_csv('MNIST_1.csv')
+    X=A.iloc[:,1:].to_numpy()
+    y=A.iloc[:,0].to_numpy()
+    labels=np.unique(y)
+    
+    source = pd.DataFrame({"Label": ['0','1','2','3','4','5','6','7','8','9'], "Count": [y[y==0].shape[0],y[y==1].shape[0],y[y==2].shape[0],y[y==3].shape[0],y[y==4].shape[0],
+                                 y[y==5].shape[0],y[y==6].shape[0],y[y==7].shape[0],y[y==8].shape[0],y[y==9].shape[0]]})
+
+    d=alt.Chart(source).mark_arc(innerRadius=50).encode(
+        theta=alt.Theta(field="Count", type="quantitative"),
+        color=alt.Color(field="Label", type="nominal",scale=alt.Scale(scheme='rainbow')),
+        tooltip=("Label","Count")
+    ).interactive()
+
+    cols[0].altair_chart(d, use_container_width=True)
+    
+    Classifier_List = ['Nearest Neighbors', 'Support Vector Machine',
+                   'Decision Tree','Random Forest','Neural Network']#, 'Gaussian Process']
+    Classification_Object = cols[1].selectbox( 'Classification Method?', Classifier_List,index=0)
+    
+    First_Label_Biased = cols[2].slider('Choose Label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)),format='%i')
+    
+    Train_Size = cols[3].number_input('Train/Test Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.8,format='%f')
+    
+    Overall_Count = y.shape[0]
+    Desired_Count = y[y==int(First_Label_Biased)].shape[0]
+    
+    Biased_Ratio = cols[4].number_input('Count Ratio for Rest of the Labels vs Selected Label:', min_value=0.1, max_value=8.0,step=0.01, value=1.0,format='%f')
+    
+    st.markdown('<p class="font_text">Explanation for "Count Ratio for Rest of the Labels vs Selected Label": This ratio define the count for the other label based on the count of the investigated label, e.g. for count ratio 1.0, if your selected label (default label 4) has 900 rows in the dataset, the counts for the other label would be 1*900 which is 900 rows.  </p>', unsafe_allow_html=True)
+    
+    # Creating Classifier Object
+    
+    if Classification_Object == 'Nearest Neighbors':
+        cols1_KNN = st.columns(5,gap='medium')
+        
+        Neighbor_KNN = cols1_KNN[0].slider('Neighbors Number KNN:', 1, 20, 5,format='%i')
+        Weights_KNN = cols1_KNN[1].select_slider('Weight function used in prediction KNN:',options=['uniform', 'distance'],value='uniform')
+        Algorithm_KNN = cols1_KNN[2].select_slider('Algorithm used to compute the nearest neighbors KNN:',options=['auto', 'ball_tree', 'kd_tree', 'brute'],value='auto')
+        Power_Distance_KNN = cols1_KNN[3].slider('Minkowski-distance power for KNN:', 1, 20, 2,format='%i')
+        Leaf_Size_KNN=30
+        if Algorithm_KNN == 'kd_tree' or Algorithm_KNN == 'ball_tree':
+            Leaf_Size = cols1_KNN[4].number_input('Leaf size:',value=5,format='%i')
+        
+        Estimator = KNeighborsClassifier(n_neighbors=Neighbor_KNN, weights=Weights_KNN, algorithm=Algorithm_KNN, p=Power_Distance_KNN, metric='minkowski',leaf_size=Leaf_Size_KNN)
+    
+    elif Classification_Object == 'Support Vector Machine':
+        cols1_SVC  = st.columns(7,gap='medium')
+        
+        Regulizer_SVC = cols1_SVC [0].number_input('Value of regularization parameter SVC:',value=1.00)
+        Kernel_SVC = cols1_SVC [1].select_slider('Kernel function SVC:',options=['linear', 'poly','rbf','sigmoid'],value='rbf')
+        Degree_SVC = 3
+        Gamma_SVC = 'scale'
+        if Kernel_SVC == 'poly':
+            Degree_SVC = cols1_SVC [6].slider('Polynomial degree kernel function SVC:', 1, 20, 3,format='%i')
+        
+        if Kernel_SVC == 'poly' or Kernel_SVC == 'rbf' or Kernel_SVC == 'sigmoid':
+            Gamma_SVC = cols1_SVC [5].select_slider('Kernel coefficient SVC:',options=['scale','auto'],value='scale')
+        
+        Random_State_SVC = cols1_SVC [2].slider('Seed number random shuffeling SVC:', 1,200, value=45,format='%i')
+        Tolerance_SVC = cols1_SVC [3].number_input('Tolerance value for SVC between 0.00001 and 0.01:', min_value=0.00001,max_value=0.01, value=0.001,step=0.00001,format='%f')
+        Max_Iteration_SVC = cols1_SVC [4].number_input('Iteration limit SVC:', min_value=-1,max_value=100000, value=-1,step=100,format='%i')
+        
+        Estimator = SVC(C=Regulizer_SVC, kernel=Kernel_SVC, degree=Degree_SVC, gamma=Gamma_SVC, tol=Tolerance_SVC, max_iter=-1, random_state=Random_State_SVC)
+    
+    elif Classification_Object == 'Decision Tree':
+        cols1_DTC = st.columns(7,gap='medium')
+        
+        Criterion_DTC = cols1_DTC[0].selectbox('Measure the quality of split DTC:',['gini', 'entropy', 'log_loss'],index = 0)
+        Splitter_DTC = cols1_DTC[1].selectbox('Split-strategy at each node DTC:',['best', 'random'],index = 0)
+        Max_Feature_DTC = cols1_DTC[2].selectbox('Split-method for number of features in DTC:',['auto', 'sqrt', 'log2'],index = 0)
+        Random_State_DTC = cols1_DTC[3].slider('Seed number random shuffeling DTC:', 1,200, value=45,format='%i')
+        Max_Depth_DTC = cols1_DTC[4].slider('Maximum Depth Tree DTC:', 1,100, value=45,format='%i')
+        Min_Samples_Split_DTC = cols1_DTC[5].slider('Minimum number samples for split at internal node DTC:', 1,10, value=2,format='%i')
+        Min_Samples_Leaf_DTC = cols1_DTC[6].slider('Minimum number samples for each leaf node DTC:', 1,10, value=1,format='%i')
+        
+        Estimator = DecisionTreeClassifier(criterion=Criterion_DTC, splitter=Splitter_DTC, max_depth=Max_Depth_DTC, max_features=Max_Feature_DTC, min_samples_leaf=Min_Samples_Leaf_DTC, min_samples_split=Min_Samples_Split_DTC, random_state=Random_State_DTC)
+    
+    elif Classification_Object == 'Random Forest':
+        cols1_RFC = st.columns(8,gap='medium')
+        
+        N_Estimators_RFC = cols1_RFC[0].slider('Tree number in forest RFC:', 1,400, value=100,format='%i')
+        Criterion_RFC = cols1_RFC[1].selectbox('Measure the quality of split RFC:',['gini', 'entropy', 'log_loss'],index = 0)
+        Max_Feature_RFC = cols1_RFC[2].selectbox('Method for features number used in split RFC:',['auto', 'sqrt', 'log2'],index = 0)
+        Random_State_RFC = cols1_RFC[3].slider('Seed number random shuffeling RFC:', 1,200, value=45,format='%i')
+        Bootstraping_RFC = cols1_RFC[4].checkbox('Training data bootstrapping RFC')
+        Max_Depth_RFC = cols1_RFC[5].slider('Tree maximum depth RFC:', 1,100, value=45,format='%i')
+        Min_Samples_Split_RFC = cols1_RFC[6].slider('Minimum number of samples for internal node split  RFC:', 1,10, value=2,format='%i')
+        Min_Samples_Leaf_RFC = cols1_RFC[7].slider('Minimum number of samples for leaf node RFC:', 1,10, value=1,format='%i')
+        
+        Estimator = RandomForestClassifier(n_estimators=N_Estimators_RFC, criterion=Criterion_RFC, max_features=Max_Feature_RFC, max_leaf_nodes=None, min_impurity_decrease=0.0, bootstrap=Bootstraping_RFC, random_state=Random_State_RFC)
+                                   
+    else:
+        cols1 = st.columns(9,gap='medium')
+        
+        Num_Hidden_Layer = cols1[0].slider('Number of Hidden Layers NN Classifier: ',1,20, value=2,format='%i')
+        Activation = cols1[1].selectbox('Select activation function NN Classifier:',['identity', 'relu', 'logistic', 'tanh'],index = 0)
+        Solver = cols1[2].selectbox('Select solver type NN Classifier:',['adam', 'sgd', 'lbfgs'],index = 0)
+        Alpha = cols1[3].number_input('Alpha (non-negative) NN Classifier: ',value=0.01,format='%f')
+        Learning_Rate = cols1[4].selectbox('Select learning rate type NN Classifier:',['constant', 'invscaling', 'adaptive'],index = 0)
+        Learning_Rate_Init = cols1[5].number_input('Initial learning rate NN Classifier: ',value=0.001,format='%f')
+        Max_Iteration = cols1[6].slider('Number of iteration NN Classifier:', 0, 20000, 200,format='%i')
+        Random_State = cols1[7].slider('Random state NN Classifier:', 0, 200, 40,format='%i')
+        Tolerence = cols1[8].number_input('Tolerence value NN Classifier: ',value=0.0001,format='%f')
+        
+        cols2 = st.columns(Num_Hidden_Layer)
+        Num_Neuron=np.zeros(Num_Hidden_Layer)
+        for j in range (Num_Hidden_Layer):
+            with cols2[j]:
+                Num_Neuron[j] = st.slider('Neurons Number '+str(j+1)+' Hidden Layer:',1, 1000, value=200,format='%i')
+                
+        Num_Neuron=Num_Neuron.astype(int)
+        
+        Estimator = MLPClassifier(hidden_layer_sizes=Num_Neuron, activation=Activation, solver=Solver, alpha=Alpha,
+                          batch_size='auto', learning_rate=Learning_Rate, learning_rate_init=Learning_Rate_Init,
+                          max_iter=Max_Iteration, random_state=Random_State, tol=Tolerence)
+                          
+    X_Biased = X[y==int(First_Label_Biased),:]
+    y_Biased = y[y==int(First_Label_Biased)]
+    X_Rest = X[y!=int(First_Label_Biased),:]
+    y_Rest = y[y!=int(First_Label_Biased)]
+    
+    Count = int(np.ceil(Biased_Ratio*Desired_Count))
+    
+    idx = np.random.choice(int(X_Rest.shape[0]), Count, replace=False)    
+    
+    X_Rest_Biased = X_Rest[idx,:]
+    y_Rest_Biased = y_Rest[idx]
+    a=np.where(labels!=First_Label_Biased)
+    y_Rest_Biased[:] = a[0][0]
+    
+    X_Biased_Classification = np.append(X_Biased,X_Rest_Biased,axis=0)
+    y_Biased_Classification = np.append(y_Biased,y_Rest_Biased,axis=0)
+    
+    st.write('Based on these hyperparameters, the classification dataset used for training and testing has the size of ',Count+int(X_Biased.shape[0]), ', where it has ', int(X_Biased.shape[0]) ,' for the investigated label (',First_Label_Biased,'), and rest represent other rows in MNIST dataset.')
+    
+    X_Classification = X_Biased_Classification
+    y_Classification = y_Biased_Classification
+    Scaler = cols[5].checkbox('Scale Data?')
+    if Scaler:
+        Scaler_Type = cols[6].select_slider('Select scaler object:',['Min-Max Scaler', 'Standard Scaler', 'Max-Abs Scaler'],value = 'Standard Scaler')
+        if Scaler_Type == 'Min-Max Scaler':
+            Scaler_Object = MinMaxScaler()
+        elif Scaler_Type == 'Standard Scaler':
+            Scaler_Object = StandardScaler()
+        else:
+            Scaler_Object = MaxAbsScaler()
+        
+        X_Classification = Scaler_Object.fit_transform(X_Biased_Classification)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_Classification, y_Classification,random_state=42,train_size=Train_Size)
+    Estimator.fit(X_train, y_train)
+    predictions = Estimator.predict(X_Classification)
+    cm = confusion_matrix(y_Classification, predictions, labels=Estimator.classes_)
+    Labels_Confuse = np.unique(y_Classification)
+    Ready = st.checkbox("See confusion matrix for biased dataset?")
+    
+    if (Ready):
+        fig=px.imshow(cm, x=Estimator.classes_, y=Estimator.classes_, labels=dict(x="Predicted Labels", y="True Labels", color="Count"), text_auto=True)
+        fig.update_layout(
+            xaxis = dict(
+                tickmode = 'array',
+                tickvals = [Labels_Confuse[0],Labels_Confuse[1]],
+                ticktext = [str(First_Label_Biased),'Rest']
+            )
+        )
+        fig.update_layout(
+            yaxis = dict(
+                tickmode = 'array',
+                tickvals = [Labels_Confuse[0],Labels_Confuse[1]],
+                ticktext = [str(First_Label_Biased),'Rest']
+            )
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 1: What are the values in the figure on the right, when you move around the figure? </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 2: How do you think hypothetical bias would affect the classification? </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 3: Understanding the goal of confusion matrix, what are the impacts of train-test split size and count ratio on the classification? Do you think scaling could help improving the accuracy? What you can say about other classification technique (KNN is default estimator, try to use other classification methods)? </p>', unsafe_allow_html=True)
+
+    # st.write(idx)
+    
+    
+
+##################################################################################################################################################################
     
 with tab[2]:
     st.markdown('<p class="font_header">Under Construction!!!!!! </p>', unsafe_allow_html=True)
