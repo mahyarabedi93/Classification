@@ -211,7 +211,7 @@ with tab[0]:
         X_New=np.copy(X1)
         y_New=np.copy(y1)
     
-    Classifier_List = ['Nearest Neighbors', 'Support Vector Machine',
+    Classifier_List = ['Nearest Neighbors', 'Support Vector Machine','Gaussian Process',
                    'Decision Tree','Random Forest','Neural Network','Ada Boost',
                    'Naive Bayes', 'Quadratic Discriminant Analysis']#, 'Gaussian Process']
     Classification_Object=cols[2].selectbox( 'Classifier Object?', Classifier_List,index=0)
@@ -267,7 +267,7 @@ with tab[0]:
             Kernel_GPC = DotProduct()
         Random_State_GPC = cols1_GPC[2].slider('Seed number for random shuffeling GPC:', 1,200, value=45,format='%i')
         Restart_Optimizer_GPC = cols1_GPC[3].slider('The number of restarts of the kernel’s optimizer GPC', 0, 1000, 200,format='%i')
-        Max_Iteration_GPC = cols1_GPC[4].number_input('Limit for number of iteration GPC:', min_value=-1,max_value=100000, value=-1,step=100,format='%i')
+        Max_Iteration_GPC = cols1_GPC[4].slider('Limit for number of iteration GPC:', 1,10000, value=300,format='%i')
     
         Estimator = GaussianProcessClassifier(kernel=Kernel_GPC, n_restarts_optimizer=Restart_Optimizer_GPC, max_iter_predict=Max_Iteration_GPC, random_state=Random_State_GPC)
     
