@@ -96,10 +96,10 @@ with cols[2].expander("Calming Video"):
 ####################################################################################################################################################################
 
 st.write(font_css, unsafe_allow_html=True)
-tab = st.tabs(["Binary Classifier", "Case Study: Binary Classification of Biased Dataset", "Multi Labels Classifier"])
+tab = st.tabs(["Binary/Multi-Label Classification", "Case Study: Binary Classification of Biased Dataset"])
 
 with tab[0]:
-    cols=st.columns(6,gap='medium')
+    cols=st.columns(7,gap='medium')
     Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
     if Dataset_Name == 'MNIST':
         # A= pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
@@ -145,25 +145,71 @@ with tab[0]:
     
     # Binary Classification
     
-    Classification_Option = cols[3].selectbox( 'Binary classification option?',('One vs. One', 'One vs. Rest'),index=1)
-    if Dataset_Name == 'MNIST':
-        if Classification_Option =='One vs. One':
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
-            Second_Label = cols[5].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+    Classification_Method = cols[3].selectbox( 'Classification type?',('Binary', 'Multi-Label'),index=0)
+    
+    if Classification_Method == 'Binary':
+        Classification_Option = cols[4].selectbox( 'Binary classification option?',('One vs. One', 'One vs. Rest'),index=1)
+        if Dataset_Name == 'MNIST':
+            if Classification_Option =='One vs. One':
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+            else:
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+        elif Dataset_Name == 'Iris':
+            if Classification_Option =='One vs. One':
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+            else:
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
         else:
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
-    elif Dataset_Name == 'Iris':
+            if Classification_Option =='One vs. One':
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+            else:
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+
         if Classification_Option =='One vs. One':
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
-            Second_Label = cols[5].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+            X1 = np.copy(X)
+            y1 = np.copy(y)
+            X1_label_1 = X1[y1==First_Label,:]
+            X1_label_2 = X1[y1==Second_Label,:]
+            y1_label_1 = y1[y1==First_Label]
+            y1_label_2 = y1[y1==Second_Label]
+            X_New = np.append(X1_label_1,X1_label_2,axis=0)
+            y_New = np.append(y1_label_1,y1_label_2,axis=0)
         else:
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+            X_New = np.copy(X)
+            y1 = np.copy(y)
+            a=np.where(labels!=First_Label)
+            y1[y1!=First_Label] = a[0][0]
+            y_New=np.copy(y1)
     else:
-        if Classification_Option =='One vs. One':
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
-            Second_Label = cols[5].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
+        if Dataset_Name == 'MNIST':
+            Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 4:',['0', '1', '2', '3'],default = '0')
+            Labels_Options_2 = cols[5].multiselect('Choose labels from 4 to 6:',['4', '5', '6'],default = '4')
+            Labels_Options_3 = cols[6].multiselect('Choose labels from 7 to 9:',['7', '8', '9'],default = '7')
+            Labels_Option=Labels_Options_1+Labels_Options_2+Labels_Options_3
+        elif Dataset_Name == 'Penguin':
+            Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '0')
+            Labels_Options_2 = cols[5].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '1')
+            Labels_Options_3 = cols[6].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '2')
+            Labels_Option=Labels_Options_1+Labels_Options_2+Labels_Options_3
         else:
-            First_Label = cols[4].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+            Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '0')
+            Labels_Options_2 = cols[5].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '1')
+            Labels_Options_3 = cols[6].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '2')
+            Labels_Option=Labels_Options_1+Labels_Options_2+Labels_Options_3
+        Labels = list(map(int, Labels_Option))
+        y1=[]
+        for i in Labels:
+            y1=np.append(y1,y[y==i],axis=0)
+            if i==Labels[0]:
+                X1= X[y==i,:]
+            else:
+                X1= np.append(X1,X[y==i,:],axis=0)
+        
+        X_New=np.copy(X1)
+        y_New=np.copy(y1)
     
     Classifier_List = ['Nearest Neighbors', 'Support Vector Machine',
                    'Decision Tree','Random Forest','Neural Network','Ada Boost',
@@ -189,7 +235,7 @@ with tab[0]:
         cols1_SVC  = st.columns(7,gap='medium')
         
         Regulizer_SVC = cols1_SVC [0].number_input('Choose the value of regularization parameter SVC:',value=1.00)
-        Kernel_SVC = cols1_SVC [1].select_slider('Choose a kernel function SVC:',options=['linear', 'poly','rbf','sigmoid'],value='rbf')
+        Kernel_SVC = cols1_SVC [1].select_slider('Choose a kernel function SVC:',options=['linear', 'poly','rbf','sigmoid'],value='linear')
         Degree_SVC = 3
         Gamma_SVC = 'scale'
         if Kernel_SVC == 'poly':
@@ -288,25 +334,7 @@ with tab[0]:
         Estimator = GaussianNB()
 
     else:
-        Estimator = QuadraticDiscriminantAnalysis()
-    
-    # Preparing Data
-    
-    if Classification_Option =='One vs. One':
-        X1 = np.copy(X)
-        y1 = np.copy(y)
-        X1_label_1 = X1[y1==First_Label,:]
-        X1_label_2 = X1[y1==Second_Label,:]
-        y1_label_1 = y1[y1==First_Label]
-        y1_label_2 = y1[y1==Second_Label]
-        X_New = np.append(X1_label_1,X1_label_2,axis=0)
-        y_New = np.append(y1_label_1,y1_label_2,axis=0)
-    else:
-        X_New = np.copy(X)
-        y1 = np.copy(y)
-        a=np.where(labels!=First_Label)
-        y1[y1!=First_Label] = a[0][0]
-        y_New=np.copy(y1)
+        Estimator = QuadraticDiscriminantAnalysis()    
         
     # Scaling Section
     
@@ -329,33 +357,43 @@ with tab[0]:
     y_Classification = np.copy(y_New)
     
     # tabs = st.tabs(["Cross Validation Score", "Confusion Matrix Visualizaiton", "Precision-Recall Curve" , "Receiver Operating Characteristic"])
-    cols2 = st.columns(2,gap='medium')
     
+    # if Classification_Method == 'Binary':
+    if Classification_Method == 'Binary':
+        cols2 = st.columns(2,gap='medium')
+    else:
+        cols2 = st.columns(2,gap='medium')
+        
     with cols2[1]:
         Test_Size = st.number_input('Test Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.2,format='%f')
-        Random_State = st.slider('Random state for Splitter:', 0, 200, 40)
+        Random_State = st.slider('Random state for Splitter:', 0, 200, 173)
         X_train, X_test, y_train, y_test = train_test_split(X_Classification, y_Classification,random_state=Random_State,test_size=Test_Size)
         Estimator.fit(X_train, y_train)
         predictions = Estimator.predict(X_Classification)
         cm = confusion_matrix(y_Classification, predictions, labels=Estimator.classes_)
         Labels_Confuse = np.unique(y_Classification)
-        fig=px.imshow(cm, x=Estimator.classes_, y=Estimator.classes_, labels=dict(x="Predicted Labels", y="True Labels", color="Count"), text_auto=True)
+        Tickvals=[]
+        Ticktext=[]
+        for i in Labels_Confuse:
+            Tickvals=np.append(Tickvals,int(i))
+            Ticktext=np.append(Ticktext,str(int(i)))
+        fig=px.imshow(cm, x=Estimator.classes_, y=Estimator.classes_, labels=dict(x="Predicted Labels", y="True Labels", color="Count"), text_auto=True,height=np.maximum(int(Tickvals.shape[0])*100,400),width=np.maximum(int(Tickvals.shape[0])*100,400))
         fig.update_layout(
             xaxis = dict(
                 tickmode = 'array',
-                tickvals = [Labels_Confuse[0],Labels_Confuse[1]],
-                ticktext = [str(Labels_Confuse[0]),str(Labels_Confuse[1])]
+                tickvals = Tickvals,
+                ticktext = Ticktext
             )
         )
         fig.update_layout(
             yaxis = dict(
                 tickmode = 'array',
-                tickvals = [Labels_Confuse[0],Labels_Confuse[1]],
-                ticktext = [str(Labels_Confuse[0]),str(Labels_Confuse[1])]
+                tickvals = Tickvals,
+                ticktext = Ticktext
             )
         )
         st.plotly_chart(fig, use_container_width=True)
-        
+            
     with cols2[0]:
         CV_Number = st.slider('Number of cross validation folds:', 2, 30, 5,format='%i')
         CV_Score=cross_val_score(Estimator, X_Classification, y_Classification, cv=CV_Number)
@@ -363,33 +401,12 @@ with tab[0]:
         fig = px.bar(x=CV_X, y=CV_Score,labels={'x': "", 'y': "Score" })#, color=CV_X,color_discrete_sequence=px.colors.qualitative.G10)
         fig.update_coloraxes(showscale=False)
         st.plotly_chart(fig, use_container_width=True)
-    
+            
     st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 1: What is your interpertation of Iris or Penguin dataset using visualization?</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 2: What does confusion matrix tell you?</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 3: What is the importance of cross-validation for the investigated datasets? What does it represents?</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST dataset)? </p>', unsafe_allow_html=True)
-    # with cols2[2]:
-        # Train_Size = st.number_input('Train Split:', min_value=0.0, max_value=1.0,step=0.01, value=0.8,format='%f')
-        # Random_State = st.slider('Random state for Split:', 0, 200, 40)
-        # X_train, X_test, y_train, y_test = train_test_split(X_Classification, y_Classification,random_state=12,train_size=Train_Size)
-        # Estimator.fit(X_train, y_train)
-        # predictions = Estimator.predict(X_Classification)
-        # Labels_Name = np.unique(y_Classification)
-        # precision, recall, thresholds = precision_recall_curve(y_Classification, predictions)
-        
-        # plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=First_Label)
-        # st.pyplot()
-        # if Classification_Option== 'One vs. One':
-            # plot_precision_recall_curve(Estimator, X_test, y_test,pos_label=Second_Label)
-            # st.pyplot()
-            
-    # with cols2[3]:
-    # cross_val_score(Estimator, X_Classification, y_Classification, cv=5)
-    
-    # precision, recall, thresholds = precision_recall_curve(y_true, y_scores)
-    # display = PrecisionRecallDisplay.from_estimator(Estimator, X_test, y_test, name=Classification_Object)
-    # fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=2)
     
 ##################################################################################################################################################################
 
@@ -583,8 +600,8 @@ with tab[1]:
 
 ##################################################################################################################################################################
     
-with tab[2]:
-    st.markdown('<p class="font_header">Under Construction!!!!!! </p>', unsafe_allow_html=True)
+# with tab[2]:
+    # st.markdown('<p class="font_header">Under Construction!!!!!! </p>', unsafe_allow_html=True)
 
 ##################################################################################################################################################################
 
