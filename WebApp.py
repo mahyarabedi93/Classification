@@ -48,27 +48,27 @@ st.set_page_config(layout="wide")
 ##################################################################################################################################################################
 
 st.markdown(""" <style> .font_title {
-font-size:50px ; font-family: 'times'; color: black;text-align: center;} 
+font-size:50px ; font-family: 'times';text-align: center;} 
 </style> """, unsafe_allow_html=True)
 
 st.markdown(""" <style> .font_header {
-font-size:50px ; font-family: 'times'; color: black;text-align: left;} 
+font-size:50px ; font-family: 'times';text-align: left;} 
 </style> """, unsafe_allow_html=True)
 
 st.markdown(""" <style> .font_subheader {
-font-size:35px ; font-family: 'times'; color: black;text-align: left;} 
+font-size:35px ; font-family: 'times';text-align: left;} 
 </style> """, unsafe_allow_html=True)
 
 st.markdown(""" <style> .font_subsubheader {
-font-size:28px ; font-family: 'times'; color: black;text-align: left;} 
+font-size:28px ; font-family: 'times';text-align: left;} 
 </style> """, unsafe_allow_html=True)
 
 st.markdown(""" <style> .font_text {
-font-size:26px ; font-family: 'times'; color: black;text-align: left;} 
+font-size:26px ; font-family: 'times';text-align: left;} 
 </style> """, unsafe_allow_html=True)
 
 st.markdown(""" <style> .font_subtext {
-font-size:18px ; font-family: 'times'; color: black;text-align: center;} 
+font-size:18px ; font-family: 'times';text-align: center;} 
 </style> """, unsafe_allow_html=True)
 
 font_css = """
@@ -90,7 +90,7 @@ cols = st.columns([2, 4 , 2])
 with cols[0].expander("Calming Video"):
     st.video("https://www.youtube.com/watch?v=SA8lu-m2IZY",start_time=1)
 with cols[1]:
-    st.markdown('<p class="font_text"> The idea explored here is to investigate different classification methods and their accuracies regarding several dataset including MNIST, Iris, and Penguin (for now). With that in mind, multiple classification functions and some of their hyper-parameters are studied to measure their impact on the accuracy of each classifier. </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text"> The idea explored here is to investigate different classification methods and their accuracies regarding several dataset including MNIST_Digits, Iris, and Penguin (for now). With that in mind, multiple classification functions and some of their hyper-parameters are studied to measure their impact on the accuracy of each classifier. </p>', unsafe_allow_html=True)
 with cols[2].expander("Calming Video"):
     st.video("https://www.youtube.com/watch?v=_kT38XB1YHo&t=5s",start_time=1)
 ####################################################################################################################################################################
@@ -100,8 +100,8 @@ tab = st.tabs(["Binary/Multi-Label Classification", "Case Study: Binary Classifi
 
 with tab[0]:
     cols=st.columns(7,gap='medium')
-    Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST', 'Iris','Penguin'),index=1)
-    if Dataset_Name == 'MNIST':
+    Dataset_Name = cols[0].selectbox( 'Choose dataset for binary classification',('MNIST_Digits', 'Iris','Penguin','MNIST_Fashion'),index=1)
+    if Dataset_Name == 'MNIST_Digits':
         # A= pd.concat(map(pd.read_csv, ['MNIST_1.csv', 'MNIST_2.csv','MNIST_3.csv','MNIST_4.csv','MNIST_5.csv','MNIST_6.csv','MNIST_7.csv']), ignore_index=True)
         A = pd.read_csv('MNIST_1.csv')
         X=A.iloc[:,1:].to_numpy()
@@ -126,7 +126,21 @@ with tab[0]:
 
         if Visualizaiton==True:
             df = px.data.iris()
-            fig = px.scatter_matrix(df,dimensions=["sepal_width", "sepal_length", "petal_width", "petal_length"], color="species",width=800, height=800)
+            fig1 = px.scatter_matrix(df,dimensions=["sepal_width", "sepal_length", "petal_width", "petal_length"], color="species",width=800, height=800)
+            st.plotly_chart(fig1, use_container_width=True)
+    
+    elif Dataset_Name == 'MNIST_Fashion':
+        A = pd.read_csv('Fashion_MNIST.csv')
+        X=A.iloc[:,1:].to_numpy()
+        y=A.iloc[:,0].to_numpy()
+        labels=np.unique(y)
+        
+        num_to_plot = 20 # plotting the first 16 images in the dataset
+        #fig=plt.figure(figsize=(60,60))
+        Visualizaiton = cols[1].checkbox('Visualize the investigated data?', value=False)
+
+        if Visualizaiton==True:
+            fig = px.imshow(X[:num_to_plot, :].reshape(num_to_plot,28,28), animation_frame=0,height=400)
             st.plotly_chart(fig, use_container_width=True)
         
     else:
@@ -135,8 +149,8 @@ with tab[0]:
         Visualizaiton = cols[1].checkbox('Visualize the investigated data?', value=False)
 
         if Visualizaiton==True:
-            fig = px.scatter_matrix(df,dimensions=["bill_length_mm","bill_depth_mm","flipper_length_mm","body_mass_g"], color="species",width=800, height=800)
-            st.plotly_chart(fig, use_container_width=True)
+            fig2 = px.scatter_matrix(df,dimensions=["bill_length_mm","bill_depth_mm","flipper_length_mm","body_mass_g"], color="species",width=800, height=800)
+            st.plotly_chart(fig2, use_container_width=True)
         X=df[["bill_length_mm","bill_depth_mm","flipper_length_mm","body_mass_g"]].to_numpy()
         y=df
         labels=y.species.unique()
@@ -149,7 +163,7 @@ with tab[0]:
     
     if Classification_Method == 'Binary':
         Classification_Option = cols[4].selectbox( 'Binary classification option?',('One vs. One', 'One vs. Rest'),index=1)
-        if Dataset_Name == 'MNIST':
+        if Dataset_Name == 'MNIST_Digits':
             if Classification_Option =='One vs. One':
                 First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
                 Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
@@ -157,16 +171,16 @@ with tab[0]:
                 First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
         elif Dataset_Name == 'Iris':
             if Classification_Option =='One vs. One':
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
                 Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
             else:
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
         else:
             if Classification_Option =='One vs. One':
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
                 Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
             else:
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
 
         if Classification_Option =='One vs. One':
             X1 = np.copy(X)
@@ -184,7 +198,7 @@ with tab[0]:
             y1[y1!=First_Label] = a[0][0]
             y_New=np.copy(y1)
     else:
-        if Dataset_Name == 'MNIST':
+        if Dataset_Name == 'MNIST_Digits':
             Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 4:',['0', '1', '2', '3'],default = '0')
             Labels_Options_2 = cols[5].multiselect('Choose labels from 4 to 6:',['4', '5', '6'],default = '4')
             Labels_Options_3 = cols[6].multiselect('Choose labels from 7 to 9:',['7', '8', '9'],default = '7')
@@ -315,7 +329,7 @@ with tab[0]:
         Num_Neuron=np.zeros(Num_Hidden_Layer)
         for j in range (Num_Hidden_Layer):
             with cols2[j]:
-                if Dataset_Name == 'MNIST':
+                if Dataset_Name == 'MNIST_Digits':
                     Num_Neuron[j] = st.slider('Number of Neurons in '+str(j+1)+' Hidden Layer:',1, 1000, value=200,format='%i')
                 elif Dataset_Name == 'Iris':
                     Num_Neuron[j] = st.slider('Number of Neurons in '+str(j+1)+' Hidden Layer:',1, 20, value=6,format='%i')
@@ -406,15 +420,15 @@ with tab[0]:
     st.markdown('<p class="font_text">Question 1: What is your interpertation of Iris or Penguin dataset using visualization?</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 2: What does confusion matrix tell you?</p>', unsafe_allow_html=True)
     st.markdown('<p class="font_text">Question 3: What is the importance of cross-validation for the investigated datasets? What does it represents?</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST dataset)? </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST_Digits dataset)? </p>', unsafe_allow_html=True)
     
 ##################################################################################################################################################################
 
 with tab[1]:
-    st.markdown('<p class="font_text">Next, for MNIST dataset, we want to explore how unbalance dataset affect the performance of classification method for one label versus the rest. </p>', unsafe_allow_html=True)
+    st.markdown('<p class="font_text">Next, for MNIST_Digits dataset, we want to explore how unbalance dataset affect the performance of classification method for one label versus the rest. </p>', unsafe_allow_html=True)
     cols = st.columns([4,2,2,2,2,2,2])
         
-    A = pd.read_csv('MNIST_1.csv')
+    A = pd.read_csv('MNIST_Digits_1.csv')
     X=A.iloc[:,1:].to_numpy()
     y=A.iloc[:,0].to_numpy()
     labels=np.unique(y)
@@ -548,7 +562,7 @@ with tab[1]:
     X_Biased_Classification = np.append(X_Biased,X_Rest_Biased,axis=0)
     y_Biased_Classification = np.append(y_Biased,y_Rest_Biased,axis=0)
     
-    st.write('Based on these hyperparameters, the classification dataset used for training and testing has the size of ',Count+int(X_Biased.shape[0]), ', where it has ', int(X_Biased.shape[0]) ,' for the investigated label (',First_Label_Biased,'), and rest represent other rows in MNIST dataset.')
+    st.write('Based on these hyperparameters, the classification dataset used for training and testing has the size of ',Count+int(X_Biased.shape[0]), ', where it has ', int(X_Biased.shape[0]) ,' for the investigated label (',First_Label_Biased,'), and rest represent other rows in MNIST_Digits dataset.')
     
     X_Classification = X_Biased_Classification
     y_Classification = y_Biased_Classification
