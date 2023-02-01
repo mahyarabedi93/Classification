@@ -203,6 +203,11 @@ with tab[0]:
             Labels_Options_2 = cols[5].multiselect('Choose labels from 4 to 6:',['4', '5', '6'],default = '4')
             Labels_Options_3 = cols[6].multiselect('Choose labels from 7 to 9:',['7', '8', '9'],default = '7')
             Labels_Option=Labels_Options_1+Labels_Options_2+Labels_Options_3
+        elif Dataset_Name == 'MNIST_Fashion':
+            Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 4:',['0', '1', '2', '3'],default = '0')
+            Labels_Options_2 = cols[5].multiselect('Choose labels from 4 to 6:',['4', '5', '6'],default = '4')
+            Labels_Options_3 = cols[6].multiselect('Choose labels from 7 to 9:',['7', '8', '9'],default = '7')
+            Labels_Option=Labels_Options_1+Labels_Options_2+Labels_Options_3
         elif Dataset_Name == 'Penguin':
             Labels_Options_1 = cols[4].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '0')
             Labels_Options_2 = cols[5].multiselect('Choose labels from 0 to 2:',['0', '1', '2'],default = '1')
