@@ -211,7 +211,7 @@ with tab[0]:
         X_New=np.copy(X1)
         y_New=np.copy(y1)
     
-    Classifier_List = ['Nearest Neighbors', 'Support Vector Machine','Gaussian Process',
+    Classifier_List = ['Nearest Neighbors', 'Support Vector Machine',
                    'Decision Tree','Random Forest','Neural Network','Ada Boost',
                    'Naive Bayes', 'Quadratic Discriminant Analysis']#, 'Gaussian Process']
     Classification_Object=cols[2].selectbox( 'Classifier Object?', Classifier_List,index=0)
