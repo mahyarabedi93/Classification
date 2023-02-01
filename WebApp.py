@@ -110,7 +110,7 @@ with tab[0]:
         
         num_to_plot = 20 # plotting the first 16 images in the dataset
         #fig=plt.figure(figsize=(60,60))
-        Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
+        Visualizaiton = cols[1].checkbox('Visualize the investigated data?', value=False)
 
         if Visualizaiton==True:
             fig = px.imshow(X[:num_to_plot, :].reshape(num_to_plot,28,28), animation_frame=0,height=400)
@@ -122,7 +122,7 @@ with tab[0]:
         y=datasets.load_iris().target
         labels=np.unique(y)
         
-        Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
+        Visualizaiton = cols[1].checkbox('Visualize the investigated data?', value=False)
 
         if Visualizaiton==True:
             df = px.data.iris()
@@ -132,7 +132,7 @@ with tab[0]:
     else:
         df = sns.load_dataset("penguins")
         df=df.dropna(axis=0)
-        Visualizaiton = cols[1].checkbox('Visualize the investigated data?')
+        Visualizaiton = cols[1].checkbox('Visualize the investigated data?', value=False)
 
         if Visualizaiton==True:
             fig = px.scatter_matrix(df,dimensions=["bill_length_mm","bill_depth_mm","flipper_length_mm","body_mass_g"], color="species",width=800, height=800)
