@@ -421,11 +421,11 @@ with tab[0]:
         fig.update_coloraxes(showscale=False)
         st.plotly_chart(fig, use_container_width=True)
             
-    st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 1: What is your interpertation of Iris or Penguin dataset using visualization?</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 2: What does confusion matrix tell you?</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 3: What is the importance of cross-validation for the investigated datasets? What does it represents?</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST_Digits dataset)? </p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 1: What is your interpertation of Iris or Penguin dataset using visualization?</p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 2: What does confusion matrix tell you?</p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 3: What is the importance of cross-validation for the investigated datasets? What does it represents?</p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 4: Precision-Recall accuracy is a measure of a classifier performance. How can you calculate this using confusion matrix for a classification method (Try to use Penguin or MNIST_Digits dataset)? </p>', unsafe_allow_html=True)
     
 ##################################################################################################################################################################
 
@@ -608,10 +608,10 @@ with tab[1]:
         )
         st.plotly_chart(fig, use_container_width=True)
     
-    st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 1: What are the values in the figure on the right, when you move around the figure? </p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 2: How do you think hypothetical bias would affect the classification? </p>', unsafe_allow_html=True)
-    st.markdown('<p class="font_text">Question 3: Understanding the goal of confusion matrix, what are the impacts of train-test split size and count ratio on the classification? Do you think scaling could help improving the accuracy? What you can say about other classification technique (KNN is default estimator, try to use other classification methods)? </p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_header">* Something to think about</p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 1: What are the values in the figure on the right, when you move around the figure? </p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 2: How do you think hypothetical bias would affect the classification? </p>', unsafe_allow_html=True)
+#     st.markdown('<p class="font_text">Question 3: Understanding the goal of confusion matrix, what are the impacts of train-test split size and count ratio on the classification? Do you think scaling could help improving the accuracy? What you can say about other classification technique (KNN is default estimator, try to use other classification methods)? </p>', unsafe_allow_html=True)
 
     # st.write(idx)
     
