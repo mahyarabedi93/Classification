@@ -157,16 +157,16 @@ with tab[0]:
                 First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
         elif Dataset_Name == 'Iris':
             if Classification_Option =='One vs. One':
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
                 Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
             else:
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
         else:
             if Classification_Option =='One vs. One':
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
                 Second_Label = cols[6].slider( 'Second class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))+1)
             else:
-                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels))-1)
+                First_Label = cols[5].slider('First class label:', int(np.min(labels)), int(np.max(labels)), int(np.median(labels)))
 
         if Classification_Option =='One vs. One':
             X1 = np.copy(X)
