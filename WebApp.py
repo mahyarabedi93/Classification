@@ -433,7 +433,7 @@ with tab[1]:
     st.markdown('<p class="font_text">Next, for MNIST_Digits dataset, we want to explore how unbalance dataset affect the performance of classification method for one label versus the rest. </p>', unsafe_allow_html=True)
     cols = st.columns([4,2,2,2,2,2,2])
         
-    A = pd.read_csv('MNIST_Digits_1.csv')
+    A = pd.read_csv('MNIST_1.csv')
     X=A.iloc[:,1:].to_numpy()
     y=A.iloc[:,0].to_numpy()
     labels=np.unique(y)
